@@ -1,11 +1,12 @@
-package uk.vladik.api.api.controllers;
+package com.example.demo.api.controllers;
 
+import com.example.demo.api.service.ClientService;
+import com.example.demo.store.entity.ClientEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import uk.vladik.api.api.service.ClientService;
-import uk.vladik.api.store.entity.ClientEntity;
+
 
 import java.util.List;
 

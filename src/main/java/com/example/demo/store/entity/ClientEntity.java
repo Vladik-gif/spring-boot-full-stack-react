@@ -1,4 +1,4 @@
-package uk.vladik.api.store.entity;
+package com.example.demo.store.entity;
 
 
 import jakarta.persistence.*;

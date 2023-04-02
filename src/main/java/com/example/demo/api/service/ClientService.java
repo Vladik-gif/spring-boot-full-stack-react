@@ -1,9 +1,9 @@
-package uk.vladik.api.api.service;
+package com.example.demo.api.service;
 
+import com.example.demo.store.entity.ClientEntity;
+import com.example.demo.store.repository.ClientRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import uk.vladik.api.store.entity.ClientEntity;
-import uk.vladik.api.store.repository.ClientRepository;
 
 import java.net.URI;
 import java.net.URISyntaxException;
