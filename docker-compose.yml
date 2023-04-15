@@ -8,8 +8,38 @@ services:
       context: ./backend
       dockerfile: Dockerfile
 
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db_postgres:5432/postgres
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres
+      SPRING_JPA_DATABASE_PLATFORM: org.hibernate.dialect.PostgreSQLDialect
+
+    ports:
+      - '8080:8080'
+
   frontend:
     container_name: frontend
     build:
       context: ./frontend
       dockerfile: Dockerfile
+    ports:
+      - '3000:3000'
+    depends_on:
+      - backend
+
+  db_postgres:
+    image: postgres:15.2
+    container_name: db_postgres
+
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+
+    ports:
+      - "5432:5432"
+    volumes:
+      - local:/var/lib/postgresql/data
+
+volumes:
+  local:
