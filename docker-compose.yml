@@ -28,18 +28,41 @@ services:
       - backend
 
   db_postgres:
-    image: postgres:15.2
     container_name: db_postgres
-
+    image: postgres
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: postgres
-
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+      PGDATA: /data/postgres
+    volumes:
+      - db_postgres:/data/postgres
     ports:
       - "5432:5432"
-    volumes:
-      - local:/var/lib/postgresql/data
+    networks:
+      - db_postgres
+    restart: unless-stopped
+
+  pgadmin:
+      container_name: pgadmin_container
+      image: dpage/pgadmin4
+      environment:
+        PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-pgadmin4@pgadmin.org}
+        PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:-admin}
+        PGADMIN_CONFIG_SERVER_MODE: 'False'
+      volumes:
+        - pgadmin:/var/lib/pgadmin
+
+      ports:
+        - "${PGADMIN_PORT:-5050}:80"
+      networks:
+        - db_postgres
+      restart: unless-stopped
+
+networks:
+  db_postgres:
+      driver: bridge
 
 volumes:
-  local:
+  db_postgres:
+  pgadmin:
+
