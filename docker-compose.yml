@@ -5,64 +5,61 @@ services:
   backend:
     container_name: backend
     build:
+
       context: ./backend
       dockerfile: Dockerfile
 
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://db_postgres:5432/postgres
+
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db_backend:5432/postgres
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: postgres
       SPRING_JPA_DATABASE_PLATFORM: org.hibernate.dialect.PostgreSQLDialect
 
     ports:
       - '8080:8080'
+    depends_on:
+      - db_backend
 
   frontend:
     container_name: frontend
     build:
+
       context: ./frontend
       dockerfile: Dockerfile
+
     ports:
       - '3000:3000'
     depends_on:
       - backend
 
-  db_postgres:
-    container_name: db_postgres
-    image: postgres
+  db_backend:
+    image: postgres:15.2
+    container_name: db_backend
     environment:
-      POSTGRES_USER: ${POSTGRES_USER:-postgres}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
-      PGDATA: /data/postgres
-    volumes:
-      - db_postgres:/data/postgres
+
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+
     ports:
       - "5432:5432"
-    networks:
-      - db_postgres
-    restart: unless-stopped
+    volumes:
+      - local:/var/lib/postgresql/data
 
-  pgadmin:
-      container_name: pgadmin_container
-      image: dpage/pgadmin4
-      environment:
-        PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-pgadmin4@pgadmin.org}
-        PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:-admin}
-        PGADMIN_CONFIG_SERVER_MODE: 'False'
-      volumes:
-        - pgadmin:/var/lib/pgadmin
+  pgadmin_backend:
+    image: dpage/pgadmin4:2023-03-01-1
+    container_name: pgadmin_backend
+    ports:
+      - "5050:80"
+    environment:
 
-      ports:
-        - "${PGADMIN_PORT:-5050}:80"
-      networks:
-        - db_postgres
-      restart: unless-stopped
+      PGADMIN_DEFAULT_EMAIL: vladik@gmail.com
+      PGADMIN_DEFAULT_PASSWORD: pass
 
-networks:
-  db_postgres:
-      driver: bridge
+    volumes:
+      - pgadmin_backend:/var/lib/pgadmin
 
 volumes:
-  db_postgres:
-  pgadmin:
-
+  local:
+  pgadmin_backend:
