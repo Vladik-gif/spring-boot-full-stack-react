@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import Home from '../home/Home';
+import Home from './components/home/Home';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import ClientList from '../client/ClientList';
-import ClientEdit from "../client/ClientEdit";
+import ClientList from './components/client/ClientList';
+import ClientEdit from "./components/client/ClientEdit";
 
 class App extends Component {
   render() {
